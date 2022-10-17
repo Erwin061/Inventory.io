@@ -39,7 +39,13 @@ public class InventoryIO {
         return subInventory;
     }
 
+    // Effects: returns the description of a given InventoryIO object
     public String getDescription() {
         return description;
+    }
+
+    // Effects: returns the nature of a given InventoryIO object (if a product or not)
+    public boolean getProduct() {
+        return isProduct;
     }
 }

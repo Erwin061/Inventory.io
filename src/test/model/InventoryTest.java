@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryTest {
     ArrayList<InventoryIO> testing;
@@ -62,4 +61,19 @@ class InventoryTest {
         // checks if the inventory has the sub-inventory we added to it.
         assertEquals(1,testing.get(1).getSubInventory().size());
     }
+
+    @Test
+    void testProduct() {
+        // holds the inventory object i7.
+        InventoryIO productCPU = testing.get(0).getSubInventory().get(0).getSubInventory().get(0);
+        // adds to sub-inventory of 9700K which is a product
+        productCPU.getSubInventory().add(new InventoryIO("9700K",true));
+        // checks if object is a product or not.
+        assertTrue(productCPU.getSubInventory().get(0).getProduct());
+        // adds to sub-inventory of 9700K which is a product
+        productCPU.getSubInventory().add(new InventoryIO("7700K","Kaby Lake CPU",true));
+        // checks if object is a product or not.
+        assertTrue(productCPU.getSubInventory().get(0).getProduct());
+    }
+
 }
