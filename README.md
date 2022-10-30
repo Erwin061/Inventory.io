@@ -45,4 +45,8 @@ Example: (CPU)┐
 
 - As a user, I want to be able to modify current product information and delete categories or products.
 
+- As a user, I want to be able to save my inventory.
+
+- As a user, I want to be able to reload a saved inventory.
+
 ***Side note: If time permits, I want to create the ability to sync inventory data online in the most cost effective way. If a retailer has multiple stores, this online data will allow them to check/sync stock information with every store. Additionally, if the retailer has an online website, this data could also be shared with customers, allowing them to check online if a product is in stock and, if so, where it might be located.***

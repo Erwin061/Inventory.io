@@ -1,14 +1,21 @@
 package ui;
 
 import model.InventoryIO;
+import org.json.JSONObject;
+import persistence.JsonRead;
+import persistence.JsonWrite;
+import persistence.WriteTo;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 // InventoryUI builds an intractable UI visible via the console; it helps the user to see what they are doing.
 // In addition to forming the UI, class InventoryUI also holds multiple objects from the InventoryIO class in ArrayLists
 // In-sense, the user is able to an X to a Y; many InventoryIO objects inside class InventoryUI.
 // At this moment, this class makes use of 7 methods to fulfill its goal.
-public class InventoryUI {
+public class InventoryUI implements WriteTo {
     Scanner input = new Scanner(System.in);
     ArrayList<InventoryIO> initialInventory = new ArrayList<>();
     ArrayList<ArrayList<InventoryIO>> keepTrack = new ArrayList<>();
@@ -17,12 +24,35 @@ public class InventoryUI {
         startUI();
     }
 
+    //Effects: Reads a saved file from the default location provided.
+    //Modifies: this.
+    public void readFromJson() {
+        try {
+            JsonRead read = new JsonRead();
+            initialInventory = read.getInventoryFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+    }
+
+    //Effects: saves the state of the application in a default file.
+    //Modifies: this.
+    public void writeToJson() {
+        try {
+            JsonWrite write = new JsonWrite();
+            write.jsonSave(initialInventory);
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+    }
+
     //Effects: Asks the user to provide an input to start the UI or quit.
     private void startUI() {
         int fail;
         System.out.println("Hello! Please select one of the following options:");
         System.out.println("\n1 - Display interactive GUI map!");
-        System.out.println("\n2 - Quit");
+        System.out.println("\n2 - Load a save file!");
+        System.out.println("\n3 - Save & Quit");
 
         do {
             String answer = input.next();
@@ -30,6 +60,10 @@ public class InventoryUI {
             if (answer.equals("1")) {
                 checkInventorySize();
             } else if (answer.equals("2")) {
+                readFromJson();
+                System.out.println("Loaded the save file! You can select 1 to display it.");
+            } else if (answer.equals("3")) {
+                writeToJson();
                 System.exit(1);
             } else {
                 fail = 1;
@@ -47,7 +81,7 @@ public class InventoryUI {
     private InventoryIO createInventory() {
         String isProduct;
         String name;
-        String description;
+        String description = "";
 
         do {
             System.out.println("Are you adding a product or an inventory? (0 = inventory, 1 = product)");
@@ -61,7 +95,8 @@ public class InventoryUI {
         }
         name = input.next();
         System.out.println("Enter a short description.");
-        description = input.next();
+        input.useDelimiter("\n");
+        description += input.next();
         System.out.println("All done!");
         return new InventoryIO(name,description,isProduct.equals("1"));
     }
@@ -86,6 +121,7 @@ public class InventoryUI {
             }
         } else {
             keepTrack.add(initialInventory);
+            writeToJson();
             showInventory();
         }
     }
@@ -120,6 +156,7 @@ public class InventoryUI {
                 --indexPointer;
             } else if (move.equals("s") && indexPointer < keepTrack.get(keepTrack.size() - 1).size() - 1) {
                 ++indexPointer;
+
             } else if (move.equals("d")) {
                 checkSubInventory(indexPointer, keepTrack);
                 indexPointer = 0;

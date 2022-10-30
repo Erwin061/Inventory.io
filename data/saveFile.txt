@@ -1,0 +1,6 @@
+{"Inventory": [{
+    "product": false,
+    "name": "change me pls",
+    "description": "change me pls",
+    "subInventory": []
+ }]}
