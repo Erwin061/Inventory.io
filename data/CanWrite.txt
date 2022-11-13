@@ -1,0 +1,24 @@
+{"Inventory": [{
+    "product": false,
+    "name": "CPU",
+    "description": "contains all CPUs",
+    "subInventory": [
+       {
+          "product": false,
+          "name": "INTEL",
+          "description": "CPU",
+          "subInventory": [{
+             "product": false,
+             "name": "i7",
+             "description": "",
+             "subInventory": []
+          }]
+       },
+       {
+          "product": false,
+          "name": "AMD",
+          "description": "CPU",
+          "subInventory": []
+       }
+    ]
+ }]}

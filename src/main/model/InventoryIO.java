@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class InventoryIO {
     String description; // stores a short description
+    String color = "N/A"; //stores color, if applicable.
     private String name; // name of an object
     private boolean isProduct; // a check to verify if a given object is a product or not.
     private ArrayList<InventoryIO> subInventory = new ArrayList<>();//holds the sub-inventory inside an inventory object
@@ -77,5 +78,20 @@ public class InventoryIO {
     // Effects: sets the product bool for the current InventoryIO product; mainly to be used by Reader during file load.
     public void setProduct(boolean isProduct) {
         this.isProduct = isProduct;
+    }
+
+    // Effects: returns the color of a given InventoryIO object (if applicable, else returns "N/A")
+    public String getColor() {
+        return this.color;
+    }
+
+    // Modifies: this.
+    // Effects: sets the color of the object.
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String toString() {
+        return this.name;
     }
 }

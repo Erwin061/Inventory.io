@@ -6,6 +6,7 @@ import persistence.JsonRead;
 import persistence.JsonWrite;
 import persistence.WriteTo;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,13 @@ import java.util.Scanner;
 // In addition to forming the UI, class InventoryUI also holds multiple objects from the InventoryIO class in ArrayLists
 // In-sense, the user is able to an X to a Y; many InventoryIO objects inside class InventoryUI.
 // At this moment, this class makes use of 7 methods to fulfill its goal.
-public class InventoryUI implements WriteTo {
+public class InventoryUI extends JFrame implements WriteTo {
     Scanner input = new Scanner(System.in);
     ArrayList<InventoryIO> initialInventory = new ArrayList<>();
     ArrayList<ArrayList<InventoryIO>> keepTrack = new ArrayList<>();
 
     public InventoryUI() {
-        startUI();
+        //startUI();
     }
 
     //Effects: Reads a saved file from the default location provided.
@@ -211,4 +212,5 @@ public class InventoryUI implements WriteTo {
             }
         }
     }
+
 }

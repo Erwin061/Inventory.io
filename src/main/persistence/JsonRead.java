@@ -48,6 +48,8 @@ public class JsonRead {
         for (Object ob : test) {
             JSONObject finalObject = (JSONObject)ob;
             InventoryIO finalProduct = new InventoryIO();
+            String color = (String) finalObject.get("color");
+            finalProduct.setColor(color);
             String name = (String) finalObject.get("name");
             finalProduct.setName(name);
             String desc = (String) finalObject.get("description");
