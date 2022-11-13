@@ -18,33 +18,5 @@
        "name": "testing 2",
        "description": "testing 2 desc",
        "subInventory": []
-    },
-    {
-       "product": true,
-       "color": "N/A",
-       "name": "*****yes",
-       "description": "yes",
-       "subInventory": []
-    },
-    {
-       "product": true,
-       "color": "N/A",
-       "name": "****yes",
-       "description": "yes",
-       "subInventory": []
-    },
-    {
-       "product": true,
-       "color": "N/A",
-       "name": "***yes",
-       "description": "yes",
-       "subInventory": []
-    },
-    {
-       "product": true,
-       "color": "N/A",
-       "name": "***yes",
-       "description": "yes",
-       "subInventory": []
     }
  ]}

@@ -5,13 +5,12 @@ import model.InventoryIO;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class InventoryGUI extends InventoryUI {
     private JTree tree1;
+    private JTree tree2;
     private JButton saveInventoryButton;
     private JButton loadInventoryButton;
     private JPanel mainInventory;
@@ -40,7 +39,6 @@ public class InventoryGUI extends InventoryUI {
 
                 if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
                     InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
-                    System.out.println(nodeInfo.getDescription());
                     refreshList(nodeInfo);
                 }
             }
@@ -57,7 +55,6 @@ public class InventoryGUI extends InventoryUI {
                     if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
                         InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
                         setPopUpMenu(e);
-                        System.out.println(nodeInfo.getDescription());
                     } else if (selectedNode != null && selectedNode.getUserObject() instanceof String) {
                         setPopUpMenuMainInventory(e);
                     }
@@ -68,6 +65,9 @@ public class InventoryGUI extends InventoryUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 readFromJson();
+                refreshJTreeGUI();
+                tree1.setModel(tree2.getModel());
+                return;
             }
         });
     }
@@ -96,9 +96,6 @@ public class InventoryGUI extends InventoryUI {
     //checks if the inventory has a sub-inventory (child). If it does, sends it to a recursive method.
     //MODIFIES: this.
     private void createUIComponents() {
-        readFromJson();
-
-        System.out.println(initialInventory.get(initialInventory.size()-1).getName());
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Inventory");
         tree1 = new JTree(root);
         for (InventoryIO in : initialInventory) {
@@ -109,15 +106,31 @@ public class InventoryGUI extends InventoryUI {
                 recursiveSubInventory(i,in);
             }
         }
-        DefaultTreeModel model = new DefaultTreeModel(root);
-
-
         tree1 = new JTree(root);
         add(tree1);
 
 
     }
 
+    //REQUIRES: non-null sub-inventory from the passed object.
+    //EFFECTS: Simply refreshes the JTree when changes are made.
+    //MODIFIES: this.
+    private void refreshJTreeGUI() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Inventory");
+        tree2 = new JTree(root);
+        for (InventoryIO in : initialInventory) {
+            DefaultMutableTreeNode i = new DefaultMutableTreeNode(in);
+            root.add(i);
+
+            if (in.getSubInventory().size() > 0) {
+                recursiveSubInventory(i,in);
+            }
+        }
+        tree2 = new JTree(root);
+        add(tree2);
+
+
+    }
     //REQUIRES: non-null sub-inventory from the passed object.
     //EFFECTS: Does a recursive call of a sub-inventory is found from the parents. Adds it to the parents, and
     //rechecks if the sub-inventory also has another sub-inventory (child).
@@ -130,8 +143,6 @@ public class InventoryGUI extends InventoryUI {
             if (in.getSubInventory().size() > 0) {
                 recursiveSubInventory(c, in);
             }
-            DefaultTreeModel model = (DefaultTreeModel) tree1.getModel();
-            model.reload();
         }
     }
 
@@ -182,41 +193,50 @@ public class InventoryGUI extends InventoryUI {
     }
 
     private void addToCurrentTreeNode() {
-        InventoryIO finalObj = new InventoryIO();
-        tree1.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode selectedNode =
+
+        DefaultMutableTreeNode selectedNode =
                         (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
 
-                if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
-                    InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
-                    nodeInfo.getSubInventory().add(new InventoryIO());
-                }
-            }
-        });
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            nodeInfo.getSubInventory().add(new InventoryIO());
+        }
+        refreshJTreeGUI();
+        tree1.setModel(tree2.getModel());
+
     }
 
+
     private void removeCurrentTreeNode() {
-        InventoryIO finalObj = new InventoryIO();
-        tree1.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode selectedNode =
-                        (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
-
-                if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
-                    InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
-                    selectedNode.remove((DefaultMutableTreeNode)tree1.getLastSelectedPathComponent());
-
-                }
+        DefaultMutableTreeNode selectedNode =
+                (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            if (initialInventory.contains(nodeInfo)) {
+                initialInventory.remove(nodeInfo);
+            } else {
+                recursiveRemover(nodeInfo,initialInventory);
             }
-        });
+        }
+        refreshJTreeGUI();
+        tree1.setModel(tree2.getModel());
+    }
+
+    private void recursiveRemover(InventoryIO x, ArrayList<InventoryIO> y) {
+        for (InventoryIO main : y) {
+            if (main.getSubInventory().contains(x)) {
+                main.getSubInventory().remove(x);
+            } else if (main.getSubInventory().size() > 0) {
+                recursiveRemover(x,main.getSubInventory());
+            }
+        }
     }
 
     private void addToMainTreeNode() {
         initialInventory.add(new InventoryIO("yes","yes",true));
-        }
+        refreshJTreeGUI();
+        tree1.setModel(tree2.getModel());
     }
+}
 
 
