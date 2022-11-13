@@ -15,7 +15,6 @@ import java.util.Scanner;
 // InventoryUI builds an intractable UI visible via the console; it helps the user to see what they are doing.
 // In addition to forming the UI, class InventoryUI also holds multiple objects from the InventoryIO class in ArrayLists
 // In-sense, the user is able to an X to a Y; many InventoryIO objects inside class InventoryUI.
-// At this moment, this class makes use of 7 methods to fulfill its goal.
 public class InventoryUI extends JFrame implements WriteTo {
     Scanner input = new Scanner(System.in);
     ArrayList<InventoryIO> initialInventory = new ArrayList<>();

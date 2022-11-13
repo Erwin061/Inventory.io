@@ -7,7 +7,8 @@ import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+//This class (Y) uses the "initialInventory" ArrayList which holds InventoryIO objects (X). We can add
+//multiple InventoryIO objects (X) into our class InventoryGUI (Y) by putting them in this ArrayList.
 public class InventoryGUI extends InventoryUI {
     private JTree tree1;
     private JTree tree2;
@@ -17,7 +18,13 @@ public class InventoryGUI extends InventoryUI {
     private JList list1;
     private DefaultListModel modelOfInv = new DefaultListModel<>();
     private JPopupMenu popUpMenu;
-    private ArrayList<InventoryIO> test = initialInventory;
+    JMenu subPopupMenu;
+    JMenuItem description;
+    JMenuItem name;
+    JMenuItem color;
+    JMenuItem product;
+    JMenuItem add;
+    JMenuItem remove;
 
     public InventoryGUI() {
         list1.setModel(modelOfInv);
@@ -30,7 +37,7 @@ public class InventoryGUI extends InventoryUI {
             }
 
         });
-
+        /////////////////////
         tree1.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -43,7 +50,7 @@ public class InventoryGUI extends InventoryUI {
                 }
             }
         });
-
+        /////////////////////
         tree1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -61,6 +68,7 @@ public class InventoryGUI extends InventoryUI {
                 }
             }
         });
+        ////////////////////
         loadInventoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,7 +96,6 @@ public class InventoryGUI extends InventoryUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
     }
 
     //REQUIRES: non-null sub-inventory from the passed object.
@@ -96,7 +103,7 @@ public class InventoryGUI extends InventoryUI {
     //checks if the inventory has a sub-inventory (child). If it does, sends it to a recursive method.
     //MODIFIES: this.
     private void createUIComponents() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Inventory");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("InventoryGUI");
         tree1 = new JTree(root);
         for (InventoryIO in : initialInventory) {
             DefaultMutableTreeNode i = new DefaultMutableTreeNode(in);
@@ -116,7 +123,7 @@ public class InventoryGUI extends InventoryUI {
     //EFFECTS: Simply refreshes the JTree when changes are made.
     //MODIFIES: this.
     private void refreshJTreeGUI() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Inventory");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("InventoryGUI");
         tree2 = new JTree(root);
         for (InventoryIO in : initialInventory) {
             DefaultMutableTreeNode i = new DefaultMutableTreeNode(in);
@@ -146,16 +153,17 @@ public class InventoryGUI extends InventoryUI {
         }
     }
 
-    private void setPopUpMenu(MouseEvent e) {
-
+    //EFFECTS: Sets up the popUpMenu for use.
+    //MODIFIES: this.
+    private void startPopUpMenu() {
         popUpMenu = new JPopupMenu("Main");
-        JMenu subPopupMenu = new JMenu("Change Descriptors");
-        JMenuItem description = new JMenuItem("Change Description");
-        JMenuItem name = new JMenuItem("Change Name");
-        JMenuItem color = new JMenuItem("Change Color");
-        JMenuItem product = new JMenuItem("Change If Product");
-        JMenuItem add = new JMenuItem("Add Sub-Inventory Item");
-        JMenuItem remove = new JMenuItem("Delete This Inventory Item");
+        subPopupMenu = new JMenu("Change Descriptors");
+        description = new JMenuItem("Change Description");
+        name = new JMenuItem("Change Name");
+        color = new JMenuItem("Change Color");
+        product = new JMenuItem("Change If Product");
+        add = new JMenuItem("Add Sub-Inventory Item");
+        remove = new JMenuItem("Delete This Inventory Item");
         subPopupMenu.add(description);
         subPopupMenu.add(name);
         subPopupMenu.add(color);
@@ -163,6 +171,12 @@ public class InventoryGUI extends InventoryUI {
         popUpMenu.add(subPopupMenu);
         popUpMenu.add(add);
         popUpMenu.add(remove);
+    }
+
+    //EFFECTS: makes a pop menu with more option.
+    //MODIFIES: this.
+    private void setPopUpMenu(MouseEvent e) {
+        startPopUpMenu();
         popUpMenu.show(mainInventory, e.getX(), e.getY());
         add.addActionListener(new ActionListener() {
             @Override
@@ -178,6 +192,8 @@ public class InventoryGUI extends InventoryUI {
         });
     }
 
+    //EFFECTS: Makes a special pop-up menu only for the main inventory object.
+    //MODIFIES: this.
     private void setPopUpMenuMainInventory(MouseEvent e) {
 
         popUpMenu = new JPopupMenu("Main");
@@ -192,8 +208,9 @@ public class InventoryGUI extends InventoryUI {
         });
     }
 
+    //EFFECTS: Adds a new object to the Sub Inventory of the one currently selected.
+    //MODIFIES: this.
     private void addToCurrentTreeNode() {
-
         DefaultMutableTreeNode selectedNode =
                         (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
 
@@ -206,7 +223,9 @@ public class InventoryGUI extends InventoryUI {
 
     }
 
-
+    //EFFECTS: Removes an object from the Sub Inventory of the one currently selected.
+    //if one is selected for removal, it keeps searching all sub-inventories until that selected object is found.
+    //MODIFIES: this.
     private void removeCurrentTreeNode() {
         DefaultMutableTreeNode selectedNode =
                 (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
@@ -222,6 +241,9 @@ public class InventoryGUI extends InventoryUI {
         tree1.setModel(tree2.getModel());
     }
 
+    //EFFECTS: helper method for removeCurrentTreeNode. It recursively checks if an ArrayList of InventoryIO objects
+    //matches the one selected for removal.
+    //MODIFIES: this.
     private void recursiveRemover(InventoryIO x, ArrayList<InventoryIO> y) {
         for (InventoryIO main : y) {
             if (main.getSubInventory().contains(x)) {
@@ -232,6 +254,8 @@ public class InventoryGUI extends InventoryUI {
         }
     }
 
+    //EFFECTS: Simply adds a new InventoryIO object to this current root tree node.
+    //MODIFIES: this.
     private void addToMainTreeNode() {
         initialInventory.add(new InventoryIO("yes","yes",true));
         refreshJTreeGUI();
