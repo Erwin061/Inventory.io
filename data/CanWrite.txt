@@ -1,14 +1,17 @@
 {"Inventory": [{
     "product": false,
+    "color": "N/A",
     "name": "CPU",
     "description": "contains all CPUs",
     "subInventory": [
        {
           "product": false,
+          "color": "N/A",
           "name": "INTEL",
           "description": "CPU",
           "subInventory": [{
              "product": false,
+             "color": "N/A",
              "name": "i7",
              "description": "",
              "subInventory": []
@@ -16,6 +19,7 @@
        },
        {
           "product": false,
+          "color": "N/A",
           "name": "AMD",
           "description": "CPU",
           "subInventory": []

@@ -91,6 +91,10 @@ public class InventoryIO {
         this.color = color;
     }
 
+    // Modifies: this
+    // Effects: Overrides the toString method so the JTree node can access the name of my Inventory Object. Since all
+    // my Inventory Objects are apparent and actual types of "InventoryIO," we don't have to override toString it for
+    // any other class. (As we have no parent class to this.)
     public String toString() {
         return this.name;
     }

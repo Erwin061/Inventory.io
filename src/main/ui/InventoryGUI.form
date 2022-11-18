@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ui.InventoryGUI">
-  <grid id="27dc6" binding="mainInventory" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainInventory" layout-manager="GridLayoutManager" row-count="10" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="18" width="565" height="402"/>
@@ -10,34 +10,60 @@
     <children>
       <hspacer id="e5002">
         <constraints>
-          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="1" row-span="2" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
       <scrollpane id="3e9a5">
         <constraints>
-          <grid row="0" column="0" row-span="9" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="10" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="3e76e" class="javax.swing.JTree" binding="tree1" custom-create="true" default-binding="true">
+          <component id="3e76e" class="javax.swing.JTree" binding="mainTree" custom-create="true">
             <constraints/>
             <properties>
               <doubleBuffered value="false"/>
               <dragEnabled value="true"/>
-              <editable value="true"/>
+              <dropMode value="USE_SELECTION"/>
+              <editable value="false"/>
               <enabled value="true"/>
+              <expandsSelectedPaths value="true"/>
+              <focusCycleRoot value="false"/>
+              <focusTraversalPolicyProvider value="false"/>
+              <focusable value="true"/>
+              <inheritsPopupMenu value="false"/>
+              <invokesStopCellEditing value="false"/>
+              <largeModel value="false"/>
+              <minimumSize width="0" height="0"/>
               <name value="er"/>
               <opaque value="true"/>
+              <preferredSize width="95" height="80"/>
+              <requestFocusEnabled value="true"/>
               <rootVisible value="true"/>
+              <scrollsOnExpand value="true"/>
               <showsRootHandles value="true"/>
+              <visible value="true"/>
             </properties>
+            <clientProperties>
+              <JTree.lineStyle class="java.lang.String" value=""/>
+            </clientProperties>
           </component>
         </children>
       </scrollpane>
+      <component id="71216" class="javax.swing.JList" binding="optionList">
+        <constraints>
+          <grid row="4" column="1" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+        </properties>
+      </component>
       <component id="7390f" class="javax.swing.JButton" binding="loadInventoryButton" default-binding="true">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Load Inventory"/>
@@ -45,19 +71,11 @@
       </component>
       <component id="ce2cb" class="javax.swing.JButton" binding="saveInventoryButton" default-binding="true">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Save Inventory"/>
         </properties>
-      </component>
-      <component id="71216" class="javax.swing.JList" binding="list1" default-binding="true">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties/>
       </component>
     </children>
   </grid>

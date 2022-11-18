@@ -1,21 +1,25 @@
 package ui;
 
 import model.InventoryIO;
+import persistence.ReadWrite;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 //This class (Y) uses the "initialInventory" ArrayList which holds InventoryIO objects (X). We can add
 //multiple InventoryIO objects (X) into our class InventoryGUI (Y) by putting them in this ArrayList.
-public class InventoryGUI extends InventoryUI {
-    private JTree tree1;
-    private JTree tree2;
+
+public class InventoryGUI extends ReadWrite {
+    private ArrayList<InventoryIO> initialInventory;
+    private JTree mainTree;
+    private JTree replacementTree;
     private JButton saveInventoryButton;
     private JButton loadInventoryButton;
     private JPanel mainInventory;
-    private JList list1;
+    private JList optionList;
     private DefaultListModel modelOfInv = new DefaultListModel<>();
     private JPopupMenu popUpMenu;
     JMenu subPopupMenu;
@@ -27,40 +31,27 @@ public class InventoryGUI extends InventoryUI {
     JMenuItem remove;
 
     public InventoryGUI() {
-        list1.setModel(modelOfInv);
-        /////////////////////
-        saveInventoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Saved!");
-                writeToJson();
-            }
+        optionList.setModel(modelOfInv);
+        saveFile();
+        nodeForList();
+        rightMouseClick();
+        loadFile();
+        changeDescFromList();
+    }
 
-        });
-        /////////////////////
-        tree1.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode selectedNode =
-                        (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
-
-                if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
-                    InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
-                    refreshList(nodeInfo);
-                }
-            }
-        });
-        /////////////////////
-        tree1.addMouseListener(new MouseAdapter() {
+    // MODIFIES: this
+    // EFFECTS: adds a MouseListener to our mainTree JTree; if an Object of type InventoryIO or String is
+    // right-clicked on, it will create a pop-up menu.
+    void rightMouseClick() {
+        mainTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
                 if (SwingUtilities.isRightMouseButton(e)) {
                     DefaultMutableTreeNode selectedNode =
-                            (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
+                            (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
                     if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
-                        InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
                         setPopUpMenu(e);
                     } else if (selectedNode != null && selectedNode.getUserObject() instanceof String) {
                         setPopUpMenuMainInventory(e);
@@ -68,19 +59,51 @@ public class InventoryGUI extends InventoryUI {
                 }
             }
         });
-        ////////////////////
+    }
+
+    //EFFECTS: loads a previously saved state of the Inventory via a button click.
+    //MODIFIES: this
+    void loadFile() {
         loadInventoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                readFromJson();
+                initialInventory = readFromJson();
                 refreshJTreeGUI();
-                tree1.setModel(tree2.getModel());
-                return;
             }
         });
     }
 
-    //EFFECTS: Adds the descriptors to a list, from which user can see what the object holds.
+    //EFFECTS: saves the given state of the Inventory via a button click.
+    //MODIFIES: this
+    void saveFile() {
+        saveInventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Saved!");
+                writeToJson(initialInventory);
+            }
+
+        });
+    }
+
+    //EFFECTS: Passes the current node selected in JTree for the refreshList() method to use as an argument.
+    //MODIFIES: this
+    public void nodeForList() {
+        mainTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode selectedNode =
+                        (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
+
+                if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
+                    InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+                    refreshList(nodeInfo);
+                }
+            }
+        });
+    }
+
+    //EFFECTS: Adds the descriptors to a list, from which user can see what the object's given descriptors are.
     //REQUIRES: non-null arg.
     public void refreshList(InventoryIO obj) {
         modelOfInv.removeAllElements();
@@ -89,6 +112,32 @@ public class InventoryGUI extends InventoryUI {
         modelOfInv.addElement("PRODUCT? : " + obj.getProduct());
         modelOfInv.addElement("COLOR? : " + obj.getColor());
     }
+
+
+    public void changeDescFromList() {
+        optionList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                    if (optionList.getSelectedIndex() == 0) {
+                        String name = JOptionPane.showInputDialog("Input a name");
+                        changeName(name);
+                    } else if (optionList.getSelectedIndex() == 1) {
+                        String desc = JOptionPane.showInputDialog("Input a description");
+                        changeDescription(desc);
+                    } else if (optionList.getSelectedIndex() == 2) {
+                        int prod = JOptionPane.showConfirmDialog(null, "Is this a product?", "", 1, 3);
+                        changeProduct(prod);
+                    } else if (optionList.getSelectedIndex() == 3) {
+                        String color = JOptionPane.showInputDialog("Input a color");
+                        changeColor(color);
+                    }
+                }
+            }
+        });
+    }
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("InventoryGUI");
@@ -103,19 +152,19 @@ public class InventoryGUI extends InventoryUI {
     //checks if the inventory has a sub-inventory (child). If it does, sends it to a recursive method.
     //MODIFIES: this.
     private void createUIComponents() {
+        initialInventory = new ArrayList<>();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("InventoryGUI");
-        tree1 = new JTree(root);
+        mainTree = new JTree(root);
         for (InventoryIO in : initialInventory) {
             DefaultMutableTreeNode i = new DefaultMutableTreeNode(in);
             root.add(i);
 
             if (in.getSubInventory().size() > 0) {
-                recursiveSubInventory(i,in);
+                recursiveSubInventory(i, in);
             }
         }
-        tree1 = new JTree(root);
-        add(tree1);
-
+        mainTree = new JTree(root);
+        add(mainTree);
 
     }
 
@@ -124,22 +173,25 @@ public class InventoryGUI extends InventoryUI {
     //MODIFIES: this.
     private void refreshJTreeGUI() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("InventoryGUI");
-        tree2 = new JTree(root);
+        replacementTree = new JTree(root);
         for (InventoryIO in : initialInventory) {
             DefaultMutableTreeNode i = new DefaultMutableTreeNode(in);
             root.add(i);
 
             if (in.getSubInventory().size() > 0) {
-                recursiveSubInventory(i,in);
+                recursiveSubInventory(i, in);
             }
         }
-        tree2 = new JTree(root);
-        add(tree2);
-
-
+        replacementTree = new JTree(root);
+        add(replacementTree);
+        mainTree.setModel(replacementTree.getModel());
+        for (int x = 0; x < mainTree.getRowCount();++x) {
+            mainTree.expandRow(x);
+        }
     }
+
     //REQUIRES: non-null sub-inventory from the passed object.
-    //EFFECTS: Does a recursive call of a sub-inventory is found from the parents. Adds it to the parents, and
+    //EFFECTS: Does a recursive call if a sub-inventory is found from the parents. Adds it to the parents, and
     //rechecks if the sub-inventory also has another sub-inventory (child).
     //MODIFIES: this.
     private void recursiveSubInventory(DefaultMutableTreeNode i, InventoryIO y) {
@@ -173,7 +225,7 @@ public class InventoryGUI extends InventoryUI {
         popUpMenu.add(remove);
     }
 
-    //EFFECTS: makes a pop menu with more option.
+    //EFFECTS: makes a pop menu with more options.
     //MODIFIES: this.
     private void setPopUpMenu(MouseEvent e) {
         startPopUpMenu();
@@ -190,6 +242,37 @@ public class InventoryGUI extends InventoryUI {
                 removeCurrentTreeNode();
             }
         });
+        description.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String desc = JOptionPane.showInputDialog("Input a description");
+                changeDescription(desc);
+            }
+        });
+
+    }
+
+    private void additionalListeners() {
+        name.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = JOptionPane.showInputDialog("Input a name");
+                changeName(name);
+            }
+        });
+        color.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String color = JOptionPane.showInputDialog("Input a color");
+                changeColor(color);
+            }
+        });
+        product.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     //EFFECTS: Makes a special pop-up menu only for the main inventory object.
@@ -199,7 +282,7 @@ public class InventoryGUI extends InventoryUI {
         popUpMenu = new JPopupMenu("Main");
         JMenuItem add = new JMenuItem("Add New Main Inventory Item");
         popUpMenu.add(add);
-        popUpMenu.show(mainInventory,e.getX(),e.getY());
+        popUpMenu.show(mainInventory, e.getX(), e.getY());
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -212,15 +295,13 @@ public class InventoryGUI extends InventoryUI {
     //MODIFIES: this.
     private void addToCurrentTreeNode() {
         DefaultMutableTreeNode selectedNode =
-                        (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
 
         if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
             InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
             nodeInfo.getSubInventory().add(new InventoryIO());
         }
         refreshJTreeGUI();
-        tree1.setModel(tree2.getModel());
-
     }
 
     //EFFECTS: Removes an object from the Sub Inventory of the one currently selected.
@@ -228,17 +309,16 @@ public class InventoryGUI extends InventoryUI {
     //MODIFIES: this.
     private void removeCurrentTreeNode() {
         DefaultMutableTreeNode selectedNode =
-                (DefaultMutableTreeNode)tree1.getLastSelectedPathComponent();
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
         if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO) {
             InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
             if (initialInventory.contains(nodeInfo)) {
                 initialInventory.remove(nodeInfo);
             } else {
-                recursiveRemover(nodeInfo,initialInventory);
+                recursiveRemover(nodeInfo, initialInventory);
             }
         }
         refreshJTreeGUI();
-        tree1.setModel(tree2.getModel());
     }
 
     //EFFECTS: helper method for removeCurrentTreeNode. It recursively checks if an ArrayList of InventoryIO objects
@@ -249,17 +329,95 @@ public class InventoryGUI extends InventoryUI {
             if (main.getSubInventory().contains(x)) {
                 main.getSubInventory().remove(x);
             } else if (main.getSubInventory().size() > 0) {
-                recursiveRemover(x,main.getSubInventory());
+                recursiveRemover(x, main.getSubInventory());
             }
         }
     }
 
-    //EFFECTS: Simply adds a new InventoryIO object to this current root tree node.
+    //EFFECTS: Simply adds a new InventoryIO object to the current root node.
     //MODIFIES: this.
     private void addToMainTreeNode() {
-        initialInventory.add(new InventoryIO("yes","yes",true));
+        initialInventory.add(new InventoryIO("yes", "yes", true));
         refreshJTreeGUI();
-        tree1.setModel(tree2.getModel());
+    }
+
+    //EFFECTS: Changes the description of the selected Inventory Object from JTree.
+    //MODIFIES: this
+    //REQUIRES: a non-empty string to be passed for the argument "s."
+    private void changeDescription(String s) {
+        DefaultMutableTreeNode selectedNode =
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO && s != null) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            while (s.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "The description cannot be empty!");
+                s = JOptionPane.showInputDialog("Input a description");
+            }
+            nodeInfo.setDesc(s);
+            refreshJTreeGUI();
+            refreshList(nodeInfo);
+            JOptionPane.showMessageDialog(null, "Successfully changed the description to " + s + "!");
+        }
+    }
+
+    //EFFECTS: Changes the name of the selected Inventory Object from JTree.
+    //MODIFIES: this
+    //REQUIRES: a non-empty string to be passed for the argument "s."
+    private void changeName(String s) {
+        DefaultMutableTreeNode selectedNode =
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO && s != null) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            while (s.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "The name cannot be empty!");
+                s = JOptionPane.showInputDialog("Input a name");
+            }
+            nodeInfo.setName(s);
+            refreshJTreeGUI();
+            refreshList(nodeInfo);
+            JOptionPane.showMessageDialog(null, "Successfully changed the name to " + s + " !");
+        }
+    }
+
+    //EFFECTS: Changes the isProduct boolean of the selected Inventory Object from JTree.
+    //MODIFIES: this
+    //REQUIRES: s!=2
+    private void changeProduct(int s) {
+        DefaultMutableTreeNode selectedNode =
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO && s != 2) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            if (s == 0) {
+                nodeInfo.setProduct(true);
+                refreshJTreeGUI();
+                refreshList(nodeInfo);
+                JOptionPane.showMessageDialog(null, "Successfully changed to product!");
+            } else {
+                nodeInfo.setProduct(false);
+                refreshJTreeGUI();
+                refreshList(nodeInfo);
+                JOptionPane.showMessageDialog(null, "Successfully changed to not a product!");
+            }
+        }
+    }
+
+    //EFFECTS: Changes the color of the selected Inventory Object from JTree.
+    //MODIFIES: this
+    //REQUIRES: a non-empty string to be passed for the argument "s."
+    private void changeColor(String s) {
+        DefaultMutableTreeNode selectedNode =
+                (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
+        if (selectedNode != null && selectedNode.getUserObject() instanceof InventoryIO && s != null) {
+            InventoryIO nodeInfo = (InventoryIO) selectedNode.getUserObject();
+            while (s.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "The color cannot be empty! ('N/A' if not applicable)");
+                s = JOptionPane.showInputDialog("Input a color");
+            }
+            nodeInfo.setColor(s);
+            refreshJTreeGUI();
+            refreshList(nodeInfo);
+            JOptionPane.showMessageDialog(null, "Successfully changed the color to " + s + " !");
+        }
     }
 }
 

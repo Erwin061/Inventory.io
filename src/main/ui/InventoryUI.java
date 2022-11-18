@@ -1,27 +1,29 @@
 package ui;
 
 import model.InventoryIO;
-import org.json.JSONObject;
 import persistence.JsonRead;
 import persistence.JsonWrite;
-import persistence.WriteTo;
+import persistence.ReadWrite;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+@Deprecated
+// Console UI superseded by actual GUI. Class is still extended by InventoryGUI
 
 // InventoryUI builds an intractable UI visible via the console; it helps the user to see what they are doing.
 // In addition to forming the UI, class InventoryUI also holds multiple objects from the InventoryIO class in ArrayLists
 // In-sense, the user is able to an X to a Y; many InventoryIO objects inside class InventoryUI.
-public class InventoryUI extends JFrame implements WriteTo {
+
+public class InventoryUI {
     Scanner input = new Scanner(System.in);
     ArrayList<InventoryIO> initialInventory = new ArrayList<>();
     ArrayList<ArrayList<InventoryIO>> keepTrack = new ArrayList<>();
 
+
     public InventoryUI() {
-        //startUI();
+        startUI();
     }
 
     //Effects: Reads a saved file from the default location provided.
@@ -47,7 +49,7 @@ public class InventoryUI extends JFrame implements WriteTo {
     }
 
     //Effects: Asks the user to provide an input to start the UI or quit.
-    private void startUI() {
+    public void startUI() {
         int fail;
         System.out.println("Hello! Please select one of the following options:");
         System.out.println("\n1 - Display interactive GUI map!");

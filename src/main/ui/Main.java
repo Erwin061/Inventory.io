@@ -1,7 +1,8 @@
 package ui;
 
+@Deprecated
 public class Main {
     public static void main(String[] args) {
-        InventoryGUI test = new InventoryGUI();
+        InventoryUI test = new InventoryUI();
     }
 }

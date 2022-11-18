@@ -94,6 +94,16 @@ class InventoryTest {
     }
 
     @Test
+    void testSettingColor() {
+        testing.get(0).setColor("Blue");
+        assertEquals("Blue", testing.get(0).getColor());
+    }
+    @Test
+    void testGettingColor() {
+        assertEquals("N/A", testing.get(0).getColor());
+    }
+
+    @Test
     void testSettingProduct() {
         testing.get(0).setProduct(true); //changes the nature of CPU inventory to a product.
         assertTrue(testing.get(0).getProduct());
@@ -120,61 +130,8 @@ class InventoryTest {
     }
 
     @Test
-    void testWriting() {
-        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
-        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
-        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
-        subOfTesting.add(testFromDefault);
-
-        try {
-            JsonWrite write = new JsonWrite();
-            write.jsonSave(testing);
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-
-        try {
-            JsonRead read = new JsonRead();
-            testingFromMain = read.getInventoryFromJson();
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
-
-        try {
-            JsonWrite write = new JsonWrite();
-            write.jsonSave(subOfTesting);
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-        try {
-            JsonRead read = new JsonRead();
-            subOfTesting = read.getInventoryFromJson();
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-        assertEquals(defaultTesting.get(0).getName(), subOfTesting.get(0).getName());
-    }
-
-
-    @Test
-    void testFailedWrite() {
-        boolean testFailure1 = false;
-        boolean testFailure2 = false;
-        try {
-            JsonWrite write = new JsonWrite("./data/\nW:her:eFileGo!txt"); // gives invalid file dir; illegal.
-            write.jsonSave(testing);
-        } catch (FileNotFoundException e) {
-            testFailure1 =true;
-        }
-        assertTrue(testFailure1);
-
-        try {
-            JsonWrite write = new JsonWrite("./data/CanWrite.txt"); // gives invalid file dir; illegal.
-            write.jsonSave(testing);
-        } catch (FileNotFoundException e) {
-            testFailure1 =true;
-        }
-        assertFalse(testFailure2);
+    void testToString() {
+            testing.get(0).setName("is it a CPU!?"); //changes the name of CPU inventory.
+            assertEquals("is it a CPU!?", testing.get(0).toString());
     }
 }
