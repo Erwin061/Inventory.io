@@ -1,10 +1,10 @@
-package persistence;
+package model;
 
-import model.InventoryIO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.JsonRead;
 import persistence.JsonWrite;
+import persistence.ReadWrite;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
