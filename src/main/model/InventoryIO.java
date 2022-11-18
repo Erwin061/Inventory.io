@@ -31,6 +31,17 @@ public class InventoryIO {
         this.description = description;
     }
 
+    public InventoryIO(String nameOfItems, String description, boolean isProduct, String color) {
+        if (isProduct) {
+            this.name = "*" + nameOfItems;
+        } else {
+            this.name = nameOfItems;
+        }
+        this.isProduct = isProduct;
+        this.description = description;
+        this.color = color;
+    }
+
     public InventoryIO() {
         this.name = "change me pls";
         this.description = "change me pls";

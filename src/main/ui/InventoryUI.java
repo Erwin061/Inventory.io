@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 @Deprecated
 // Console UI superseded by actual GUI. Class is still extended by InventoryGUI
 

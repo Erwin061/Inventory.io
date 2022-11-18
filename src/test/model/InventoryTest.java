@@ -134,4 +134,15 @@ class InventoryTest {
             testing.get(0).setName("is it a CPU!?"); //changes the name of CPU inventory.
             assertEquals("is it a CPU!?", testing.get(0).toString());
     }
+
+    @Test
+    void testGUIConstructor() {
+        InventoryIO test = new InventoryIO("test","still testing",false,"blue");
+        InventoryIO testProduct = new InventoryIO("test","still testing",true,"blue");
+        assertEquals("test",test.getName());
+        assertEquals("still testing",test.getDescription());
+        assertEquals("blue",test.getColor());
+        assertFalse(test.getProduct());
+        assertTrue(testProduct.getProduct());
+    }
 }

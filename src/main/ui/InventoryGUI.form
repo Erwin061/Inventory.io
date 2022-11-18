@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ui.InventoryGUI">
-  <grid id="27dc6" binding="mainInventory" layout-manager="GridLayoutManager" row-count="10" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainInventory" layout-manager="GridLayoutManager" row-count="12" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="18" width="565" height="402"/>
     </constraints>
-    <properties/>
+    <properties>
+      <enabled value="true"/>
+      <font name="Yu Gothic UI Light" size="18"/>
+      <inheritsPopupMenu value="true"/>
+      <opaque value="true"/>
+      <preferredSize width="500" height="500"/>
+    </properties>
     <border type="none"/>
     <children>
       <hspacer id="e5002">
         <constraints>
-          <grid row="8" column="1" row-span="2" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="1" row-span="2" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
       <scrollpane id="3e9a5">
         <constraints>
-          <grid row="0" column="0" row-span="10" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="12" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-656897"/>
+          <foreground color="-656897"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="3e76e" class="javax.swing.JTree" binding="mainTree" custom-create="true">
             <constraints/>
             <properties>
-              <doubleBuffered value="false"/>
+              <doubleBuffered value="true"/>
               <dragEnabled value="true"/>
               <dropMode value="USE_SELECTION"/>
               <editable value="false"/>
@@ -32,6 +41,7 @@
               <focusCycleRoot value="false"/>
               <focusTraversalPolicyProvider value="false"/>
               <focusable value="true"/>
+              <font name="Yu Gothic UI Light" size="18"/>
               <inheritsPopupMenu value="false"/>
               <invokesStopCellEditing value="false"/>
               <largeModel value="false"/>
@@ -53,28 +63,32 @@
       </scrollpane>
       <component id="71216" class="javax.swing.JList" binding="optionList">
         <constraints>
-          <grid row="4" column="1" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
+          <grid row="6" column="1" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="10"/>
           </grid>
         </constraints>
         <properties>
           <enabled value="true"/>
-        </properties>
-      </component>
-      <component id="7390f" class="javax.swing.JButton" binding="loadInventoryButton" default-binding="true">
-        <constraints>
-          <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Load Inventory"/>
+          <font name="Yu Gothic UI Light" size="16"/>
+          <selectionForeground color="-12828863"/>
         </properties>
       </component>
       <component id="ce2cb" class="javax.swing.JButton" binding="saveInventoryButton" default-binding="true">
         <constraints>
-          <grid row="2" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <font name="Yu Gothic UI Light" size="16"/>
           <text value="Save Inventory"/>
+        </properties>
+      </component>
+      <component id="7390f" class="javax.swing.JButton" binding="loadInventoryButton" default-binding="true">
+        <constraints>
+          <grid row="1" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Yu Gothic UI Light" size="16"/>
+          <text value="Load Inventory"/>
         </properties>
       </component>
     </children>

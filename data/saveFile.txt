@@ -1,22 +1,7 @@
-{"Inventory": [
-    {
-       "product": false,
-       "color": "N/A",
-       "name": "testing",
-       "description": "testing desc",
-       "subInventory": [{
-          "product": false,
-          "color": "N/A",
-          "name": "sub of testing",
-          "description": "sub testing desc",
-          "subInventory": []
-       }]
-    },
-    {
-       "product": false,
-       "color": "N/A",
-       "name": "testing 2",
-       "description": "testing 2 desc",
-       "subInventory": []
-    }
- ]}
+{"Inventory": [{
+    "product": false,
+    "color": "N/A",
+    "name": "change me pls",
+    "description": "change me pls",
+    "subInventory": []
+ }]}

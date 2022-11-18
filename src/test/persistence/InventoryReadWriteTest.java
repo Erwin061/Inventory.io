@@ -70,7 +70,11 @@ public class InventoryReadWriteTest extends ReadWrite {
         ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
         subOfTesting.add(testFromDefault);
 
-        writeToJson(testing);
+        try {
+            writeToJson(testing);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
 
         try {
             JsonRead read = new JsonRead();
@@ -94,8 +98,11 @@ public class InventoryReadWriteTest extends ReadWrite {
         } catch (FileNotFoundException e) {
             System.out.println("File was not found! Returning to main menu.");
         }
-
-        testingFromMain = readFromJson();
+        try {
+            testingFromMain = readFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
         assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
     }
 
@@ -107,7 +114,7 @@ public class InventoryReadWriteTest extends ReadWrite {
             JsonWrite write = new JsonWrite("./data/\nW:her:eFileGo!txt"); // gives invalid file dir; illegal.
             write.jsonSave(testing);
         } catch (FileNotFoundException e) {
-            testFailure1 =true;
+            testFailure1 = true;
         }
         assertTrue(testFailure1);
 
@@ -115,7 +122,7 @@ public class InventoryReadWriteTest extends ReadWrite {
             JsonWrite write = new JsonWrite("./data/CanWrite.txt"); // gives invalid file dir; illegal.
             write.jsonSave(testing);
         } catch (FileNotFoundException e) {
-            testFailure2 =true;
+            testFailure2 = true;
         }
         assertFalse(testFailure2);
     }
