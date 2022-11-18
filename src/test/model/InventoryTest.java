@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InventoryTest extends ReadWrite {
+class InventoryTest {
     ArrayList<InventoryIO> testing;
     ArrayList<InventoryIO> defaultTesting;
 
@@ -182,49 +182,6 @@ class InventoryTest extends ReadWrite {
             System.out.println("File was not found! Returning to main menu.");
         }
         assertEquals(defaultTesting.get(0).getName(), subOfTesting.get(0).getName());
-    }
-
-    @Test
-    void testReadFromJSON() {
-        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
-        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
-        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
-        subOfTesting.add(testFromDefault);
-
-        try {
-            writeToJson(testing);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
-        }
-
-        try {
-            JsonRead read = new JsonRead();
-            testingFromMain = read.getInventoryFromJson();
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
-    }
-
-    @Test
-    void testWriteFromJSON() {
-        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
-        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
-        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
-        subOfTesting.add(testFromDefault);
-
-        try {
-            JsonWrite write = new JsonWrite();
-            write.jsonSave(testing);
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found! Returning to main menu.");
-        }
-        try {
-            testingFromMain = readFromJson();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
-        }
-        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
     }
 
     @Test

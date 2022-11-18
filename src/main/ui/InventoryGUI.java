@@ -1,6 +1,8 @@
 package ui;
 
 import model.InventoryIO;
+import persistence.JsonRead;
+import persistence.JsonWrite;
 import persistence.ReadWrite;
 
 import javax.swing.*;
@@ -19,7 +21,7 @@ import java.util.Objects;
 //This class (Y) uses the "initialInventory" ArrayList which holds InventoryIO objects (X). We can add
 //multiple InventoryIO objects (X) into our class InventoryGUI (Y) by putting them in this ArrayList.
 
-public class InventoryGUI extends ReadWrite {
+public class InventoryGUI extends JFrame implements ReadWrite {
     private ArrayList<InventoryIO> initialInventory;
     private JTree mainTree;
     private JTree replacementTree;
@@ -481,6 +483,24 @@ public class InventoryGUI extends ReadWrite {
                 System.out.println("NullPointer exception caught in changeColor()");
             }
         }
+    }
+
+    //Effects: Reads a saved file from the default location provided.
+    //Modifies: this.
+    @Override
+    public ArrayList<InventoryIO> readFromJson() throws FileNotFoundException {
+        ArrayList<InventoryIO> initialInventory = new ArrayList<>();
+        JsonRead read = new JsonRead();
+        initialInventory = read.getInventoryFromJson();
+        return initialInventory;
+    }
+
+    //Effects: saves the state of the application in a default file.
+    //Modifies: this.
+    @Override
+    public void writeToJson(ArrayList<InventoryIO> initialInventory) throws FileNotFoundException {
+        JsonWrite write = new JsonWrite();
+        write.jsonSave(initialInventory);
     }
 }
 
