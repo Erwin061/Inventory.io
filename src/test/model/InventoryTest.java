@@ -6,12 +6,14 @@ import persistence.JsonRead;
 import persistence.JsonWrite;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.ReadWrite;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InventoryTest {
+class InventoryTest extends ReadWrite {
     ArrayList<InventoryIO> testing;
     ArrayList<InventoryIO> defaultTesting;
 
@@ -145,4 +147,105 @@ class InventoryTest {
         assertFalse(test.getProduct());
         assertTrue(testProduct.getProduct());
     }
+    @Test
+    void testWriting() {
+        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
+        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
+        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
+        subOfTesting.add(testFromDefault);
+
+        try {
+            JsonWrite write = new JsonWrite();
+            write.jsonSave(testing);
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+
+        try {
+            JsonRead read = new JsonRead();
+            testingFromMain = read.getInventoryFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
+
+        try {
+            JsonWrite write = new JsonWrite();
+            write.jsonSave(subOfTesting);
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+        try {
+            JsonRead read = new JsonRead();
+            subOfTesting = read.getInventoryFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+        assertEquals(defaultTesting.get(0).getName(), subOfTesting.get(0).getName());
+    }
+
+    @Test
+    void testReadFromJSON() {
+        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
+        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
+        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
+        subOfTesting.add(testFromDefault);
+
+        try {
+            writeToJson(testing);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
+
+        try {
+            JsonRead read = new JsonRead();
+            testingFromMain = read.getInventoryFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
+    }
+
+    @Test
+    void testWriteFromJSON() {
+        ArrayList<InventoryIO> testingFromMain = new ArrayList<>();
+        InventoryIO testFromDefault = new InventoryIO(); //creates a default Inventory Object.
+        ArrayList<InventoryIO> subOfTesting = new ArrayList<>();
+        subOfTesting.add(testFromDefault);
+
+        try {
+            JsonWrite write = new JsonWrite();
+            write.jsonSave(testing);
+        } catch (FileNotFoundException e) {
+            System.out.println("File was not found! Returning to main menu.");
+        }
+        try {
+            testingFromMain = readFromJson();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
+        assertEquals(testing.get(0).getName(), testingFromMain.get(0).getName());
+    }
+
+    @Test
+    void testFailedWrite() {
+        boolean testFailure1 = false;
+        boolean testFailure2 = false;
+        try {
+            JsonWrite write = new JsonWrite("./data/\nW:her:eFileGo!txt"); // gives invalid file dir; illegal.
+            write.jsonSave(testing);
+        } catch (FileNotFoundException e) {
+            testFailure1 = true;
+        }
+        assertTrue(testFailure1);
+
+        try {
+            JsonWrite write = new JsonWrite("./data/CanWrite.txt"); // gives invalid file dir; illegal.
+            write.jsonSave(testing);
+        } catch (FileNotFoundException e) {
+            testFailure2 = true;
+        }
+        assertFalse(testFailure2);
+    }
 }
+
