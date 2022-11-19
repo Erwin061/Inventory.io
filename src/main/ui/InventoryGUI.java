@@ -54,6 +54,7 @@ public class InventoryGUI extends JFrame implements ReadWrite {
     void rightMouseClick() {
         mainTree.addMouseListener(new MouseAdapter() {
             @Override
+            //EFFECTS: If mouseClick is heard, it opens a pop-up menu with additional information.
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
@@ -77,6 +78,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         loadInventoryButton.setIcon(load);
         loadInventoryButton.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: reads from a file to load previous save.
+            //MODIFIES: this
             public void actionPerformed(ActionEvent e) {
                 try {
                     initialInventory = readFromJson();
@@ -95,10 +98,11 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         saveInventoryButton.setIcon(save);
         saveInventoryButton.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: Saves current Inventory and shows pop-up confirmation.
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Saved!");
                 try {
                     writeToJson(initialInventory);
+                    JOptionPane.showMessageDialog(null, "Saved!");
                 } catch (FileNotFoundException f) {
                     System.out.println("File Not Found!");
                 }
@@ -112,6 +116,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
     public void nodeForList() {
         mainTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
+            //EFFECTS: Checks if a given value was selected and heard by TreeSelectionEvent. Refreshes JList if true.
+            //MODIFIES: this
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode selectedNode =
                         (DefaultMutableTreeNode) mainTree.getLastSelectedPathComponent();
@@ -134,7 +140,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         modelOfInv.addElement("COLOR: " + obj.getColor());
     }
 
-
+    //EFFECTS: Allows the user to select a given description in the JList tab and rename it by double-clicking.
+    //MODIFIES: this
     public void changeDescFromList() {
         optionList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -259,18 +266,22 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         popUpMenu.show(mainInventory, e.getX(), e.getY());
         add.addActionListener(new ActionListener() {
             @Override
+            // EFFECTS: calls the addToCurrentTreeNode().
             public void actionPerformed(ActionEvent e) {
                 addToCurrentTreeNode();
             }
         });
         remove.addActionListener(new ActionListener() {
             @Override
+            // EFFECTS: calls removeCurrentTreeNode() if action is heard.
             public void actionPerformed(ActionEvent e) {
                 removeCurrentTreeNode();
             }
         });
         description.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: calls changeDescription() if action is field variable description hears something.
+            //MODIFIES: this
             public void actionPerformed(ActionEvent e) {
                 String desc = JOptionPane.showInputDialog("Input a description");
                 changeDescription(desc);
@@ -283,6 +294,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
     private void additionalListeners() {
         name.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: calls a pop-up and passes the return to changeName() method.
+            //MODIFIES: this
             public void actionPerformed(ActionEvent e) {
                 String name = JOptionPane.showInputDialog("Input a name");
                 changeName(name);
@@ -290,6 +303,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         });
         color.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: takes the return value from the pop-up and passes it to changeColor().
+            //MODIFIES: this
             public void actionPerformed(ActionEvent e) {
                 String color = JOptionPane.showInputDialog("Input a color");
                 changeColor(color);
@@ -297,6 +312,8 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         });
         product.addActionListener(new ActionListener() {
             @Override
+            //EFFECTS: takes the return value from the pop-up and passes it to changeProduct().
+            //MODIFIES: this
             public void actionPerformed(ActionEvent e) {
                 int prod = JOptionPane.showConfirmDialog(null, "Is this a product?", "", 1, 3);
                 changeProduct(prod);
@@ -316,6 +333,7 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         popUpMenu.show(mainInventory, e.getX(), e.getY());
         add.addActionListener(new ActionListener() {
             @Override
+            // EFFECTS: calls addToMainTreeNode();
             public void actionPerformed(ActionEvent e) {
                 addToMainTreeNode();
             }

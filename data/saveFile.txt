@@ -1,13 +1,7 @@
 {"Inventory": [{
-    "product": true,
-    "color": "wdawd",
-    "name": "*wd",
-    "description": "wd",
-    "subInventory": [{
-       "product": true,
-       "color": "N/A",
-       "name": "**awd",
-       "description": "awd",
-       "subInventory": []
-    }]
+    "product": false,
+    "color": "N/A",
+    "name": "change me pls",
+    "description": "change me pls",
+    "subInventory": []
  }]}
