@@ -370,7 +370,7 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         newObj.add(color);
         newObj.add(new JLabel("NOTE: A product can have sub-products that can be seen as optional add-ons!"));
         do {
-            JOptionPane.showMessageDialog(null, newObj, "d", JOptionPane.QUESTION_MESSAGE);
+            JOptionPane.showMessageDialog(null, newObj, "InventoryIO", JOptionPane.QUESTION_MESSAGE);
         } while (name.getText().isEmpty() && desc.getText().isEmpty() && color.getText().isEmpty());
         return new InventoryIO(name.getText(),desc.getText(),productCheck.isSelected(),color.getText());
     }
