@@ -136,6 +136,8 @@ public class InventoryIO {
         return this.name;
     }
 
+    // Effects: Takes a call from the UI package and starts to print all Events stored within the Event Collection.
+    // Modifies: this
     public static void printEvent() {
         Iterator<Event> test = EventLog.getInstance().iterator();
         while (test.hasNext()) {
