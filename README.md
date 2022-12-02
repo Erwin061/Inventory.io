@@ -65,14 +65,63 @@ Example: (CPU)┐
 	
 	<space> 
 	
-	You will now see that a new object called "\*test" as been created inside "InventoryGUI," you have now successfully added an object of class X inside Y class! You can re-do the previous steps multiple times to add multiple Xs in class Y.
+	You will now see that a new object called "*test" as been created inside "InventoryGUI," you have now successfully added an object of class X inside Y class! You can re-do the previous steps multiple times to add multiple Xs in class Y.
 	
 	
 	
 - You can generate the second required event related to adding Xs to a Y by left-clicking on the new X object you made earlier; once the object is highlighted in blue, information about it will appear towards the right. Draw your attention the field "NAME:" and double left click on it, you will be greeted by a new pop-up menu where you can enter a new name for this X object. For the sake of simplicity, enter "renamed test" to be the new name for this object and press OK. At this point, you will see a pop-up confirming the change you made, press OK and look at your X object, it should now be renamed to "renamed test."
 
-	<space>
+<space>
 
 - You can locate my visual component by looking at the Save and Load buttons on the top right, they both are accompanied by images that visually describe what the buttons do. I have also added images for both, the option that let you add Xs into Ys (green "+" circle icon) and the option that removes a selected X from Y (red (-) circle icon). You can view those by highlighting the X object you renamed and right-clicking on it.
+  
+<space>
+  
 - You can save the state of my application by clicking on the "Save" button on the top right, which is just below the "Load" button. Once the application has been saved, you will see a pop-up menu confirming this by saying "Saved." You can now exit the program. Note: Your save is written in the data folder inside this project. 
+
+<space>
+
 - You can reload the state of my application by click on the "Load" button on the top right, which is just above the "Save" button. If you have followed all the steps mentioned thus far, you are free to test the load feature by saving and exiting the program. Once the program is closed, you can re-run the program and click on the "Load" button, this should restore the program prior to exiting it.
+
+
+# Phase 4: Task 2
+
+**Sample logged events:**
+
+- Logged event for adding X object to Y:<pre>
+Fri Dec 02 01:15:48 PST 2022
+New 'Test Object' (X) added to Inventory (Y)
+Description set: Testing
+Product type set: false
+Color set: N/A</pre>
+
+- Logged event for changing the name of X Inventory object:<pre>
+Fri Dec 02 01:16:01 PST 2022
+New name for 'Test Object' set to: Renamed Test Object</pre>
+
+- Logged event for changing the description of X Inventory object:<pre>
+Fri Dec 02 01:16:16 PST 2022
+New description for 'Renamed Test Object' set to: Renamed Test Description</pre>
+
+- Logged event for changing product type of X Inventory object:<pre>
+Fri Dec 02 01:16:23 PST 2022
+New product type for 'Renamed Test Object' set to: true</pre>
+
+- Logged event for changing color of X Inventory object:<pre>
+Fri Dec 02 01:16:29 PST 2022
+New color for 'Renamed Test Object' set to: Renamed Color</pre>
+
+# Phase 4: Task 3
+
+**Changes that would benefit the program:**
+
+- The InventoryGUI class representing the overall GUI for this program would highly benefit from better class cohesion and coupling. The two main issues within the InventoryGUI class are based around code redundancy and unrelated code present within the same scope; this is especially true with the Listeners that are used to report user action. We can fix this by separating different functions of the GUI, where every different class could represent a specific function, making the code easier to read and understand. All of this should mean that we don't have unwanted code that has nothing to do with another present within the same class and also a major reduction in duplicity. 
+
+<space> 
+
+- Code efficiency could also be improved when it comes to the use of recursion within the GUI and Save/Reload features of this class; as of right now, the code complexity in relation to Big-O is not up to standard due to it being extremely linear.
+
+<space> 
+
+**UML Diagram**
+![](UML_Design_Diagram.png)

@@ -175,6 +175,12 @@ public class InventoryGUI extends JFrame implements ReadWrite {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        WindowListener checkForExit = new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                InventoryIO.printEvent();
+            }
+        };
+        frame.addWindowListener(checkForExit);
     }
 
     //REQUIRES: non-null sub-inventory from the passed object.

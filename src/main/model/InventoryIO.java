@@ -1,7 +1,7 @@
 package model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class InventoryIO {
     String description; // stores a short description
@@ -11,6 +11,9 @@ public class InventoryIO {
     private ArrayList<InventoryIO> subInventory = new ArrayList<>();//holds the sub-inventory inside an inventory object
     //need to implement more options for products
 
+    // Modifies: this.
+    // Effects: Constructor for Inventory Object that takes 2 arguments for product and name.
+    // Requires: nameOfItems != null.
     public InventoryIO(String nameOfItems, boolean isProduct) {
         if (isProduct) {
             this.name = "*" + nameOfItems;
@@ -21,6 +24,9 @@ public class InventoryIO {
         this.description = "";
     }
 
+    // Modifies: this.
+    // Effects: Constructor for Inventory Object that takes 3 arguments for product, name, and description.
+    // Requires: nameOfItems != null && description != null.
     public InventoryIO(String nameOfItems, String description, boolean isProduct) {
         if (isProduct) {
             this.name = "*" + nameOfItems;
@@ -31,6 +37,9 @@ public class InventoryIO {
         this.description = description;
     }
 
+    // Modifies: this.
+    // Effects: Constructor for Inventory Object that takes 4 arguments for product, name, color, and description.
+    // Requires: nameOfItems != null && description != null && color != null.
     public InventoryIO(String nameOfItems, String description, boolean isProduct, String color) {
         if (isProduct) {
             this.name = "*" + nameOfItems;
@@ -40,11 +49,20 @@ public class InventoryIO {
         this.isProduct = isProduct;
         this.description = description;
         this.color = color;
+        Event clk = new Event("null");
+        EventLog.getInstance().logEvent(new Event(""));
+        EventLog.getInstance().logEvent(new Event(clk.getDate() + "\nNew '" + name + "' (X) added to Inventory (Y)"));
+        EventLog.getInstance().logEvent(new Event("Description set: " + description));
+        EventLog.getInstance().logEvent(new Event("Product type set: " + isProduct));
+        EventLog.getInstance().logEvent(new Event("Color set: " + color));
+
     }
 
+    // Modifies: this.
+    // Effects: Generic constructor for Inventory Object that takes 0 arguments.
     public InventoryIO() {
-        this.name = "change me pls";
-        this.description = "change me pls";
+        this.name = "InventoryIO";
+        this.description = "Root of Inventory";
         this.isProduct = false;
     }
 
@@ -59,6 +77,8 @@ public class InventoryIO {
     }
 
     public void setName(String name) {
+        Event mainEvent = new Event("New name for '" + this.name + "' set to: "  + name);
+        EventLog.getInstance().logEvent(new Event("\n" + mainEvent.getDate() + "\n" + mainEvent.getDescription()));
         this.name = name;
     }
 
@@ -81,13 +101,17 @@ public class InventoryIO {
     // Modifies: this.
     // Requires: description input not to be null, else name become null rather than nothing.
     // Effects: sets the description for the current InventoryIO product; mainly to be used by Reader during file load.
-    public void setDesc(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        Event mainEvent = new Event("New description for '" + this.name + "' set to: "  + desc);
+        EventLog.getInstance().logEvent(new Event("\n" + mainEvent.getDate() + "\n" + mainEvent.getDescription()));
+        this.description = desc;
     }
 
     // Modifies: this.
     // Effects: sets the product bool for the current InventoryIO product; mainly to be used by Reader during file load.
     public void setProduct(boolean isProduct) {
+        Event mainEvent = new Event("New product type for '" + this.name + "' set to: "  + isProduct);
+        EventLog.getInstance().logEvent(new Event("\n" + mainEvent.getDate() + "\n" + mainEvent.getDescription()));
         this.isProduct = isProduct;
     }
 
@@ -99,6 +123,8 @@ public class InventoryIO {
     // Modifies: this.
     // Effects: sets the color of the object.
     public void setColor(String color) {
+        Event mainEvent = new Event("New color for '" + this.name + "' set to: "  + color);
+        EventLog.getInstance().logEvent(new Event("\n" + mainEvent.getDate() + "\n" + mainEvent.getDescription()));
         this.color = color;
     }
 
@@ -108,5 +134,12 @@ public class InventoryIO {
     // any other class. (As we have no parent class to this.)
     public String toString() {
         return this.name;
+    }
+
+    public static void printEvent() {
+        Iterator<Event> test = EventLog.getInstance().iterator();
+        while (test.hasNext()) {
+            System.out.println(test.next().getDescription());
+        }
     }
 }
