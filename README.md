@@ -119,7 +119,7 @@ New color for 'Renamed Test Object' set to: Renamed Color</pre>
 
 <space> 
 
-- Code efficiency could also be improved when it comes to the use of recursion within the GUI and Save/Reload features of this class; as of right now, the code complexity in relation to Big-O is not up to standard due to it being extremely linear.
+- Code efficiency is also a prominent issue due to the use of recursion within the GUI and Persistence packages of this class; as of right now, the code complexity in relation to Big-O is not up to standard due to it being extremely linear. This linear complexity would be improved with the use of much more efficient searching algorithms. 
 
 <space> 
 
